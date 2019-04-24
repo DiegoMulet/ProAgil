@@ -13,7 +13,7 @@
         <tr class="tr">
             <th>
                 <button class="btn-outline-primary" (click)="alternarImagem()">
-                    Mostrar Imagem
+                    <i class="{{mostrarImagem ? 'fa fa-eye-slash' : 'fa fa-eye'}}"></i>
                 </button>
             </th>
             <th>Id</th>
@@ -28,19 +28,32 @@
     <tbody *ngIf="eventosFiltrados && eventosFiltrados.length">
         <tr *ngFor="let evento of eventosFiltrados">
             <td>
-                <img *ngIf="mostrarImagem" src="http://localhost:5000/img/{{evento.imagemUrl}}"
-                    [style.width.px]="imagemLargura"
-                    [style.margin.px]="imagemMargem">
+                <img *ngIf="mostrarImagem" src="http://localhost:5000/img/{{evento.imagemURL}}"
+                [style.width.px]="imagemLargura"
+                [style.margin.px]="imagemMargem">
             </td>
-            <td>{{evento.eventoId}}</td>
+            <td>{{evento.id}}</td>
             <td>{{evento.tema}}</td>
             <td>{{evento.local}}</td>
-            <td>{{evento.dataEvento}}</td>
+            <td>{{evento.dataEvento | DateTimeFormatPipe}}</td>
             <td>{{evento.qtdPessoas}}</td>
-            <td>{{evento.lote | uppercase }}</td>
             <td>
-                <button class="btn btn-success"></button>
-                <button class="btn btn-danger"></button>
+                <div *ngIf="!evento.lotes.length">
+                    Não Informado
+                </div>
+                <div *ngIf="evento.lotes.length">
+                    {{evento.lotes[0].nome | uppercase}}
+                </div>
+            </td>
+            <td>
+                <div class= "btn-group">
+                    <button class="btn btn-sm btn-success" (click)= "openModal(template)">
+                        <i class= "fa fa-edit" tooltip= "Editar"></i>
+                    </button>
+                    <button class="btn btn-sm btn-danger" (click)= "openModal(template)">
+                        <i class= "fa fa-eraser" tooltip= "Excluir"></i>
+                    </button>
+                </div>                
             </td>
         </tr>
     </tbody>
@@ -52,3 +65,16 @@
         </tr>
     </tfoot>
 </table>
+
+<ng-template #template>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Modal</h4>
+        <button type="button" class="close pull-right" 
+        aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    This is a modal.
+</div>
+</ng-template>

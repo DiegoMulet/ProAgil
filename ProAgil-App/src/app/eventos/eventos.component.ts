@@ -1,34 +1,46 @@
-import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Component, OnInit, TemplateRef } from '@angular/core';
+import { EventoService } from '../_services/evento.service';
+import { Evento } from '../_models/Evento';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 
 @Component({
   selector: 'app-eventos',
   templateUrl: './eventos.component.html',
   styleUrls: ['./eventos.component.css']
+  // Provider para injecao de dependencia quando necessario:
+  // providers: [EventoService]
+
 })
 export class EventosComponent implements OnInit {
 
+  eventosFiltrados: Evento[];
+  eventos: Evento[];
+  imagemLargura = 50;
+  imagemMargem = 2;
+  mostrarImagem = false;
+  modalRef: BsModalRef;
+
   FiltroLista: string;
+
+  constructor(
+      private eventoService: EventoService
+    , private modalService: BsModalService
+  ) { }
+
   get filtroLista(): string {
     return this.FiltroLista;
   }
+
   set filtroLista(value: string) {
     this.FiltroLista = value;
     this.eventosFiltrados = this.filtroLista.length ? this.filtrarEventos(this.filtroLista) : this.eventos;
   }
 
-  eventosFiltrados: any = [];
-  eventos: any = [];
-  imagemLargura = 50;
-  imagemMargem = 2;
-  mostrarImagem = false;
-  constructor(private http: HttpClient) { }
-
   ngOnInit() {
     this.getEventos();
   }
 
-  filtrarEventos(filtrarPor: string): any {
+  filtrarEventos(filtrarPor: string): Evento[] {
     filtrarPor = filtrarPor.toLocaleLowerCase();
     return this.eventos.filter(
       evento => evento.tema.toLocaleLowerCase().indexOf(filtrarPor) !== -1
@@ -40,13 +52,17 @@ export class EventosComponent implements OnInit {
   }
 
   getEventos() {
-    this.http.get('http://localhost:5000/api/values').subscribe(response => {
-      this.eventos = response;
-      this.eventosFiltrados = response;
-      console.log(response);
+    this.eventoService.getAllEvento().subscribe(
+      (eventos: Evento[]) => {
+      this.eventos = eventos;
+      this.eventosFiltrados = eventos;
+      console.log(eventos);
     },
     error => { console.log(error); }
       );
   }
 
+  openModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template);
+  }
 }
