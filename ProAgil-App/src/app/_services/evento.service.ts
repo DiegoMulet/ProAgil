@@ -9,7 +9,11 @@ import { Evento } from '../_models/Evento';
   providedIn: 'root'
 })
 export class EventoService {
-baseURL = 'http://localhost:5000/api/evento';
+// desenv
+// baseURL = 'http://localhost:5000/api/evento';
+
+// prod
+baseURL = 'http://diegomulet.eastus.cloudapp.azure.com/ProaAgilAPI/api/evento';
 
 constructor(private http: HttpClient) { }
 
