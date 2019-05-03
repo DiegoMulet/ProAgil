@@ -4,6 +4,7 @@ import { Evento } from '../_models/Evento';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import {defineLocale, BsLocaleService, ptBrLocale} from 'ngx-bootstrap';
+import { ToastrService } from 'ngx-toastr';
 defineLocale('pt-br', ptBrLocale);
 
 @Component({
@@ -27,12 +28,13 @@ export class EventosComponent implements OnInit {
   registerForm: FormGroup;
   bsValue = new Date().toLocaleDateString();
   FiltroLista: string;
-
+  titulo = 'Eventos';
   constructor(
       private eventoService: EventoService
     , private modalService: BsModalService
     , private fb: FormBuilder
     , private localeService: BsLocaleService
+    , private toastr: ToastrService
     ) {
       this.localeService.use('pt-br');
     }
@@ -67,9 +69,11 @@ export class EventosComponent implements OnInit {
           (eventos: Evento[]) => {
             this.eventos = eventos;
             this.eventosFiltrados = eventos;
-            console.log(eventos);
           },
-          error => { console.log(error); }
+          error => {
+            this.toastr.error(error, 'Falha ao carregar eventos');
+            console.log(error);
+          }
           );
         }
 
@@ -84,8 +88,9 @@ export class EventosComponent implements OnInit {
             () => {
                 template.hide();
                 this.getEventos();
+                this.toastr.success('Evento deletado com sucesso.');
               }, error => {
-                console.log(error);
+                this.toastr.error(error, 'Falha ao deletar evento');
               }
           );
         }
@@ -98,11 +103,11 @@ export class EventosComponent implements OnInit {
         }
 
         novoEvento(template: any) {
+          this.modoSalvar = 'post';
           this.openModal(template);
         }
 
         openModal(template: any) {
-          this.modoSalvar = 'post';
           this.registerForm.reset();
           template.show();
         }
@@ -125,11 +130,11 @@ export class EventosComponent implements OnInit {
               this.evento = Object.assign({}, this.registerForm.value);
               this.eventoService.postEvento(this.evento).subscribe(
                 (novoEvento: Evento) => {
-                  console.log(novoEvento);
                   template.hide();
                   this.getEventos();
+                  this.toastr.success('Evento criado com sucesso.');
                 }, error => {
-                  console.log(error);
+                  this.toastr.error(error, 'Falha ao criar evento');
                 }
               );
             } else {
@@ -138,8 +143,9 @@ export class EventosComponent implements OnInit {
                 (novoEvento: Evento) => {
                   template.hide();
                   this.getEventos();
+                  this.toastr.success('Evento editado com sucesso.');
                 }, error => {
-                  console.log(error);
+                  this.toastr.error(error, 'Falha ao editar evento');
                 }
               );
             }
