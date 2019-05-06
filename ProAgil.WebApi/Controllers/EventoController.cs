@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
@@ -144,6 +146,35 @@ namespace ProAgil.WebApi.Controllers
             }
 
             return BadRequest();
+        }
+
+        [HttpPost("{upload}")]
+        public async Task<IActionResult> upload()
+        {
+            try
+            {
+                var file = Request.Form.Files[0];
+                var folder = Path.Combine("Resources","Images");
+                var pathSave = Path.Combine(Directory.GetCurrentDirectory(), folder);
+
+                if(file.Length > 0)
+                {
+                    var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName;
+                    var fullPath = Path.Combine(pathSave, fileName.Replace("\"", "").Trim());
+
+                    using(var stream = new FileStream(fullPath, FileMode.Create))
+                    {
+                        file.CopyTo(stream);
+                    }
+                }
+                return Ok();
+            }
+            catch (System.Exception o)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, o.Message);
+            }
+
+            return BadRequest("Falha no upload.");
         }
     }
 }
