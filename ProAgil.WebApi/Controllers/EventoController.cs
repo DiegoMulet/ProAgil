@@ -139,13 +139,13 @@ namespace ProAgil.WebApi.Controllers
                 {
                     return Ok();
                 }
+                
+                return BadRequest();
             }
             catch (System.Exception)
             {
                 return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco de Dados Falhou");
             }
-
-            return BadRequest();
         }
 
         [HttpPost("{upload}")]
@@ -169,9 +169,9 @@ namespace ProAgil.WebApi.Controllers
                 }
                 return Ok();
             }
-            catch (System.Exception o)
+            catch (System.Exception ex)
             {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, o.Message);
+                return this.StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
 
             return BadRequest("Falha no upload.");
