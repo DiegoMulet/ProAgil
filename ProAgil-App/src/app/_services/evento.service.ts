@@ -1,5 +1,5 @@
 import { Injectable, Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Evento } from '../_models/Evento';
 
@@ -15,7 +15,7 @@ baseURL = 'http://localhost:5000/api/evento';
 // prod
 // baseURL = 'http://diegomulet.eastus.cloudapp.azure.com/ProaAgilAPI/api/evento';
 
-constructor(private http: HttpClient) { }
+constructor(private http: HttpClient) {}
 
 getAllEvento(): Observable<Evento[]>  {
    return this.http.get<Evento[]>(this.baseURL);

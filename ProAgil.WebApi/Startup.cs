@@ -78,8 +78,14 @@ namespace ProAgil.WebApi
                 options.Filters.Add(new AuthorizeFilter(policy));
             })
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-            .AddJsonOptions(options => options.SerializerSettings.ReferenceLoopHandling = 
-                Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+            .AddJsonOptions(options => 
+            {   
+                options.SerializerSettings.ReferenceLoopHandling = 
+                    Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                
+                options.SerializerSettings.NullValueHandling = 
+                    Newtonsoft.Json.NullValueHandling.Ignore;
+            });
 
             services.AddScoped<IProAgilRepository,ProAgilRepository>();
             services.AddAutoMapper();

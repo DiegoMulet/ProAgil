@@ -173,8 +173,6 @@ namespace ProAgil.WebApi.Controllers
             {
                 return this.StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
-
-            return BadRequest("Falha no upload.");
         }
     }
 }
