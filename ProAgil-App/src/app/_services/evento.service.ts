@@ -21,8 +21,8 @@ getAllEvento(): Observable<Evento[]>  {
    return this.http.get<Evento[]>(this.baseURL);
 }
 
-getEventoById(id: number): Observable<Evento[]>  {
-  return this.http.get<Evento[]>(`${this.baseURL}/getById/${id}`);
+getEventoById(id: number): Observable<Evento>  {
+  return this.http.get<Evento>(`${this.baseURL}/getById/${id}`);
 }
 
 getEventoByTema(tema: string): Observable<Evento[]>  {

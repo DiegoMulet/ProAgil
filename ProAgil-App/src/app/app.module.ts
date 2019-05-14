@@ -2,7 +2,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BsDropdownModule, TooltipModule, ModalModule, BsDatepickerModule  } from 'ngx-bootstrap';
+import { BsDropdownModule, TooltipModule, ModalModule, TabsModule, BsDatepickerModule  } from 'ngx-bootstrap';
+import {NgxMaskModule} from 'ngx-mask';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
@@ -11,6 +12,7 @@ import { EventoService } from './_services/evento.service';
 
 import { AppComponent } from './app.component';
 import { EventosComponent } from './eventos/eventos.component';
+import { EventoEditComponent } from './eventos/eventoEdit/eventoEdit.component';
 import { PalestrantesComponent } from './palestrantes/palestrantes.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ContatosComponent } from './contatos/contatos.component';
@@ -23,11 +25,13 @@ import { RegistrationComponent } from './user/registration/registration.componen
 import { DateTimeFormatPipePipe } from './_helps/DateTimeFormatPipe.pipe';
 import { AuthService } from './_services/auth.service';
 import { AuthInterceptor } from './auth/auth.interceptor';
+import { NgxCurrencyModule } from 'ngx-currency';
 
 @NgModule({
    declarations: [
       AppComponent,
       EventosComponent,
+      EventoEditComponent,
       NavComponent,
       PalestrantesComponent,
       DashboardComponent,
@@ -49,11 +53,14 @@ import { AuthInterceptor } from './auth/auth.interceptor';
       ModalModule.forRoot(),
       ReactiveFormsModule,
       BrowserAnimationsModule,
+      TabsModule.forRoot(),
       ToastrModule.forRoot({
          timeOut: 10000,
          positionClass: 'toast-bottom-right',
          preventDuplicates: true,
-       })
+       }),
+       NgxMaskModule.forRoot(),
+       NgxCurrencyModule
    ],
    // possibilita a injecao de dependencia em toda a aplicacao
    providers: [

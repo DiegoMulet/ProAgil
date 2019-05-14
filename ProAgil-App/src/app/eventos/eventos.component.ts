@@ -68,6 +68,7 @@ export class EventosComponent implements OnInit {
       }
 
       getEventos() {
+        this.dataAtual = new Date().getMilliseconds().toString();
         this.eventoService.getAllEvento().subscribe(
           (eventos: Evento[]) => {
             this.eventos = eventos;
@@ -130,17 +131,29 @@ export class EventosComponent implements OnInit {
         }
 
         uploadImagem() {
-          const nomeArquivo = this.evento.imagemURL.split('\\', 3);
-          console.log('Nome do arquivo:');
-          this.evento.imagemURL = this.nomeArquivoOriginal ?  this.nomeArquivoOriginal : nomeArquivo[2];
-          console.log(`Nome do arquivo: ${this.evento.imagemURL}`);
-          this.eventoService.postUpload(this.file, this.evento.imagemURL).subscribe(
-            () => {
-              this.dataAtual = new Date().getMilliseconds().toString();
-              this.getEventos();
-            }
-          );
+          if (this.modoSalvar === 'post') {
+            const nomeArquivo = this.evento.imagemURL.split('\\', 3);
+            this.evento.imagemURL = nomeArquivo[2];
+
+            this.eventoService.postUpload(this.file, nomeArquivo[2])
+              .subscribe(
+                () => {
+                  this.dataAtual = new Date().getMilliseconds().toString();
+                  this.getEventos();
+                }
+              );
+          } else {
+            this.evento.imagemURL = this.nomeArquivoOriginal;
+            this.eventoService.postUpload(this.file, this.nomeArquivoOriginal)
+              .subscribe(
+                () => {
+                  this.dataAtual = new Date().getMilliseconds().toString();
+                  this.getEventos();
+                }
+              );
+          }
         }
+
 
         salvarAlteracao(template: any) {
           if (this.registerForm.valid) {

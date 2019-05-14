@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -43,7 +44,7 @@ namespace ProAgil.WebApi.Controllers
             }
         }
 
-        [HttpGet("{EventoId}")]
+        [HttpGet("getByid/{EventoId}")]
         public async Task<IActionResult> Get(int EventoId)
         {
             try
@@ -108,7 +109,17 @@ namespace ProAgil.WebApi.Controllers
             {
                 var evento = await _repo.GetAllEventoAsyncById(EventoId,false);
                 if(evento == null) return NotFound();
-                
+
+                var lotesExclusao =  evento.Lotes.Where(
+                    l => !model.Lotes.Select(ml => ml.Id).Contains(l.Id)).ToList();
+
+                var redesSociasExclusao =  evento.RedesSociais.Where(
+                    r => !model.RedesSociais.Select(mr => mr.Id).Contains(r.Id)).ToList();
+
+                if(lotesExclusao.Count > 0) _repo.DeleteRange(lotesExclusao);
+
+                if(redesSociasExclusao.Count > 0) _repo.DeleteRange(redesSociasExclusao);
+
                 _mapper.Map(model,evento);
                 _repo.Update(evento);
                 

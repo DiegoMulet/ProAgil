@@ -31,7 +31,7 @@
       <th>Data</th>
       <th>Qtd Pessoas</th>
       <th>Lote</th>
-      <th>Opcões</th>
+      <th colspan="2" class="text-center">Opcões</th>
     </tr>
   </thead>
   <tbody *ngIf="eventosFiltrados && eventosFiltrados.length">
@@ -63,6 +63,11 @@
             <i class= "fa fa-eraser" tooltip= "Excluir"></i>
           </button>
         </div>                
+      </td>
+      <td>
+        <a [routerLink]="[ '/evento', evento.id, 'edit' ]" tooltip="Edição Detalhada" class="btn-sm btn-warning">
+          <i class= "fa fa-eraser" tooltip= "Excluir"></i>
+        </a>
       </td>
     </tr>
   </tbody>
